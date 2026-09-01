@@ -1,21 +1,17 @@
+import Image from "next/image";
+
 export default function Home() {
   return (
     <>
     <main className="flex min-h-screen flex-col items-center justify-center text-center px-[6vw] pt-32 pb-20 bg-obsidian text-ivory">
-      <div className="w-16 h-8 border-4 border-ivory rounded-full mb-7 animate-float" />
-
-      <h1 className="font-display text-7xl sm:text-8xl md:text-9xl leading-none tracking-wide">
-        SAINT
-      </h1>
-
-      <p className="mt-6 text-sm sm:text-base tracking-[0.3em] uppercase text-ivory-dim font-semibold">
-        The Motion Never Ends
-      </p>
-
-      <div className="mt-6 w-6 h-9 relative">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 w-1 h-9 bg-burgundy-bright" />
-        <div className="absolute top-2 left-0 w-6 h-1 bg-burgundy-bright" />
-      </div>
+      <Image
+        src="/saint-logo.svg"
+        className="invert "
+        alt="SAINT — The Motion Never Ends"
+        width={320}
+        height={280}
+        priority
+      />
     </main>
     <div className="bg-burgundy overflow-hidden whitespace-nowrap py-3.5 border-y border-ivory/15">
     <div className="inline-flex animate-marquee">

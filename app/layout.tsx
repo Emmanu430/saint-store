@@ -1,11 +1,19 @@
 import type { Metadata } from "next";
-import { Inter, UnifrakturCook } from "next/font/google";
+import { Inter, UnifrakturCook, Germania_One } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import Providers from "@/components/Providers";
 
 const inter = Inter({
   variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+
+const germania = Germania_One({
+  variable: "--font-germania",
+  weight: "400",
   subsets: ["latin"],
 });
 
@@ -27,11 +35,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${unifraktur.variable} antialiased`}>
-        <Navbar />        
-        {children}
-        <Footer/>
-      </body>
+      <body className={`${inter.variable} ${unifraktur.variable} ${germania.variable} antialiased`}>
+  <Providers>
+    <Navbar />
+    {children}
+    <Footer />
+  </Providers>
+</body>
     </html>
   );
 }
