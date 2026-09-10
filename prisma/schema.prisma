@@ -26,8 +26,8 @@ model Product {
   image     String?
   createdAt DateTime   @default(now())
   cartItems CartItem[]
+  
 }
-
 model CartItem {
   id        Int      @id @default(autoincrement())
   userId    Int

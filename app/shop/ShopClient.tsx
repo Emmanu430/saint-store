@@ -2,8 +2,10 @@
     import { useState } from "react";
     import { useRouter } from "next/navigation";
     import { useSession } from "next-auth/react";
+    import Image from "next/image";
+    import Toast from "@/components/Toast";
 
-    const categories = ["All", "Hoodies", "Tees", "Outerwear", "Accessories"];
+    const categories = ["All", "Tees", "Shorts", "Accessories"];
 
     type Product = {
     id: number;
@@ -12,6 +14,7 @@
     price: number;
     category: string;
     badge: string | null;
+    image: string | null;
     };
 
     export default function ShopClient({ products }: { products: Product[] }) {
@@ -78,41 +81,49 @@
             ))}
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+        {filtered.length === 0 ? (
+            <div className="flex flex-col items-center text-center py-24">
+            <span className="font-display text-5xl text-ivory/15 mb-4">☨</span>
+            <p className="text-ivory font-semibold mb-1">Nothing here yet</p>
+            <p className="text-ivory-dim text-sm">No pieces in this category right now — check back soon.</p>
+            </div>
+        ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {filtered.map((p) => (
-            <div key={p.id} className="group">
-                <div className="aspect-4/5 bg-charcoal border border-ivory/10 flex items-center justify-center relative">
-                {p.badge && (
-                    <span className="absolute top-3.5 left-3.5 text-[10px] tracking-wide uppercase bg-burgundy px-2.5 py-1">
-                    {p.badge}
+                <div key={p.id} className="group">
+                <div className="aspect-4/5 bg-charcoal border border-ivory/10 relative overflow-hidden">
+                    {p.badge && (
+                    <span className="absolute top-3.5 left-3.5 z-10 text-[10px] tracking-wide uppercase bg-burgundy px-2.5 py-1">
+                        {p.badge}
                     </span>
-                )}
-                <span className="font-display text-6xl text-ivory/15 group-hover:text-ivory/30 transition-colors">
-                    ☨
-                </span>
+                    )}
+                    {p.image ? (
+                    <Image src={p.image} alt={p.name} fill className="object-contain" />
+                    ) : (
+                    <span className="flex items-center justify-center h-full font-display text-6xl text-ivory/15">
+                        ☨
+                    </span>
+                    )}
                 </div>
                 <div className="flex justify-between items-start mt-3.5">
-                <div>
+                    <div>
                     <b className="text-sm">{p.name}</b>
                     <span className="block text-xs text-ivory-dim">{p.detail}</span>
-                </div>
-                <span className="text-sm font-bold">${p.price}</span>
+                    </div>
+                    <span className="text-sm font-bold">${p.price}</span>
                 </div>
                 <button
-                onClick={() => addToCart(p.id, p.name)}
-                className="w-full mt-3 border border-ivory/20 py-2.5 text-[11px] tracking-widest uppercase hover:bg-ivory hover:text-obsidian transition-colors cursor-pointer"
+                    onClick={() => addToCart(p.id, p.name)}
+                    className="w-full mt-3 border border-ivory/20 py-2.5 text-[11px] tracking-widest uppercase hover:bg-ivory hover:text-obsidian transition-colors cursor-pointer"
                 >
-                Add to Cart
+                    Add to Cart
                 </button>
-            </div>
+                </div>
             ))}
-        </div>
-
-        {toast && (
-            <div className="fixed top-24 left-1/2 -translate-x-1/2 bg-ivory text-obsidian px-5 py-3 text-sm font-semibold shadow-lg z-[60]">
-            {toast}
             </div>
         )}
+
+        {toast && <Toast message={toast} />}
         </main>
     );
 }

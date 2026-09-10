@@ -13,7 +13,7 @@
     const router = useRouter();
         useEffect(()=>{
             if(status === "authenticated"){
-                router.push("/")
+                router.push("/shop")
             }
         },[status, router])
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,36 +35,50 @@
         if (res?.error) {
         setError("Invalid email or password.");
         } else {
-        router.push("/");
+        router.push("/shop");
         }
     };
 
     const handleSignUp = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError("");
+  e.preventDefault();
+  setError("");
 
-        const res = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-        });
+  if (!form.name.trim()) {
+    setError("Please enter your name.");
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+    setError("Please enter a valid email address.");
+    return;
+  }
+  if (form.password.length < 8) {
+    setError("Password must be at least 8 characters.");
+    return;
+  }
 
-        const data = await res.json();
-        setLoading(false);
+  setLoading(true);
 
-        if (!res.ok) {
-        setError(data.error || "Something went wrong.");
-        return;
-        }
+  const res = await fetch("/api/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(form),
+  });
 
-        await signIn("credentials", {
-        email: form.email,
-        password: form.password,
-        redirect: false,
-        });
-        router.push("/");
-    };
+  const data = await res.json();
+  setLoading(false);
+
+  if (!res.ok) {
+    setError(data.error || "Something went wrong.");
+    return;
+  }
+
+  await signIn("credentials", {
+    email: form.email,
+    password: form.password,
+    redirect: false,
+  });
+  router.push("/shop");
+};
 
     return (
         <main className="min-h-screen flex items-center justify-center px-[6vw] pt-20 pb-10 bg-obsidian text-ivory">

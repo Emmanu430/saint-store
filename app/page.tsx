@@ -1,12 +1,19 @@
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 
-export default function Home() {
+export default async function Home() {
+    const session = await auth();
+  if (session) {
+    redirect("/shop");
+  }
+
   return (
     <>
     <main className="flex min-h-screen flex-col items-center justify-center text-center px-[6vw] pt-32 pb-20 bg-obsidian text-ivory">
       <Image
         src="/saint-logo.svg"
-        className="invert "
+        className="invert w-[75vw] max-w-[320px] h-auto"
         alt="SAINT — The Motion Never Ends"
         width={320}
         height={280}
@@ -57,26 +64,22 @@ export default function Home() {
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-0.5 bg-ivory/10">
-          {[
-            { name: "Halo Hoodie", detail: "Obsidian · Embroidered" },
-            { name: "Motion Tee", detail: "Ivory · Puff Print" },
-            { name: "Grind Crewneck", detail: "Charcoal · Woven Label" },
-            { name: "Legacy Jacket", detail: "Obsidian · Silver Hardware" },
-            { name: "Faith Cap", detail: "Ivory · Debossed" },
-            { name: "Purpose Shorts", detail: "Charcoal · Reflective Trim" },
-          ].map((item) => (
-            <div key={item.name} className="bg-obsidian aspect-3/4 flex items-end p-6 relative group cursor-pointer">
-              <span className="absolute top-6 left-6 font-display text-4xl text-ivory/15 group-hover:text-ivory/30 transition-colors">
-                ☨
-              </span>
-              <div className="relative z-10">
-                <b className="block text-base tracking-wide mb-1">{item.name}</b>
-                <span className="text-xs text-ivory-dim">{item.detail}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div className="max-w-6xl mx-auto grid grid-cols-2 gap-10 bg-ivory/10">
+  {[
+    { name: "Saint Blessed Tees", detail: "Ivory · Puff Print", image: "/products/img3.jpg" },
+    { name: "Saint Swag Polo", detail: "Obsidian · Embroidered", image: "/products/img2.jpg" },
+    { name: "Saint Rogue Sweat Jorts", detail: "Charcoal · Reflective Trim", image: "/products/img1.jpg" },
+    { name: "Saint Skull Cap", detail: "Obsidian · Debossed", image: "/products/img4.jpg" },
+  ].map((item) => (
+    <div key={item.name} className="bg-obsidian aspect-3/4 flex items-end p-6 relative group cursor-pointer overflow-hidden">
+      <Image src={item.image} alt={item.name} fill className="object-cover" />
+      <div className="relative z-10">
+        <b className="block text-base tracking-wide mb-1">{item.name}</b>
+        <span className="text-xs text-ivory-dim">{item.detail}</span>
+      </div>
+    </div>
+  ))}
+</div>
         </section>
         <section id="manifesto" className="text-center px-[6vw] py-40">
           <blockquote className="font-display text-3xl sm:text-4xl md:text-5xl max-w-3xl mx-auto leading-snug">
