@@ -4,8 +4,6 @@
 
     async function main() {
     await prisma.cartItem.deleteMany();
-    await prisma.orderItem.deleteMany();
-    await prisma.order.deleteMany();
     await prisma.product.deleteMany();
 
     const products = [
