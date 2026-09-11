@@ -10,7 +10,7 @@ export default async function Home() {
 
   return (
     <>
-    <main className="flex min-h-screen flex-col items-center justify-center text-center px-[6vw] pt-32 pb-20 bg-obsidian text-ivory">
+    <main className="w-full flex min-h-screen flex-col items-center justify-center text-center px-[6vw] pt-32 pb-20 bg-obsidian text-ivory">
       <Image
         src="/saint-logo.svg"
         className="invert w-[75vw] max-w-[320px] h-auto"
