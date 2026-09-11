@@ -42,6 +42,7 @@
             <ul className="hidden md:flex gap-8 text-xs tracking-widest uppercase text-ivory-dim">
                 <li><Link href="/shop" className="hover:text-ivory">Shop</Link></li>
                 <li><Link href="/#philosophy" className="hover:text-ivory">Philosophy</Link></li>
+                <li><Link href="/#collection" className="hover:text-ivory">Collection</Link></li>
                 <li><Link href="/#manifesto" className="hover:text-ivory">Manifesto</Link></li>
             </ul>
             )}
@@ -84,7 +85,7 @@
         </nav>
 
         {menuOpen && (
-            <div className="fixed inset-0 z-[70] bg-obsidian flex flex-col items-center justify-center gap-2 md:hidden">
+            <div className="fixed inset-0 z-70 bg-obsidian flex flex-col items-center justify-center gap-2 md:hidden">
             <button
                 onClick={() => setMenuOpen(false)}
                 className="absolute top-5 right-[6vw] text-ivory cursor-pointer hover:rotate-90 transition-transform duration-300"
@@ -97,6 +98,7 @@
                 {[
                 { href: "/shop", label: "Shop" },
                 { href: "/#philosophy", label: "Philosophy" },
+                { href: "/#collection", label: "Collection" },
                 { href: "/#manifesto", label: "Manifesto" },
                 { href: "/cart", label: `Cart (${cartCount})` },
                 ].map((link) => (
@@ -107,7 +109,7 @@
                     className="group relative font-display text-4xl py-3 text-ivory-dim hover:text-ivory transition-colors duration-300"
                 >
                     {link.label}
-                    <span className="absolute left-1/2 -translate-x-1/2 -bottom-0.5 w-0 h-[2px] bg-burgundy-bright group-hover:w-full transition-all duration-300" />
+                    <span className="absolute left-1/2 -translate-x-1/2 -bottom-0.5 w-0 h-0.5 bg-burgundy-bright group-hover:w-full transition-all duration-300" />
                 </Link>
                 ))}
             </div>

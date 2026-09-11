@@ -32,10 +32,15 @@
     };
 
     const removeItem = async (id: number) => {
-        setItems((prev) => prev.filter((i) => i.id !== id));
-        await fetch(`/api/cart/${id}`, { method: "DELETE" });
-        window.dispatchEvent(new Event("cart-updated"));
-    };
+    const res = await fetch(`/api/cart/${id}`, { method: "DELETE" });
+    if (!res.ok) {
+        setToast("Couldn't remove item");
+        setTimeout(() => setToast(""), 2500);
+        return;
+    }
+    setItems((prev) => prev.filter((i) => i.id !== id));
+    window.dispatchEvent(new Event("cart-updated"));
+};
 
     const subtotal = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
     const shipping = items.length ? 8 : 0;

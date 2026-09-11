@@ -55,7 +55,7 @@ export default async function Home() {
       ))}
     </div>
       </section>
-      <section className="bg-charcoal px-[6vw] py-24 md:py-36">
+      <section id="collection" className="bg-charcoal px-[6vw] py-24 md:py-36">
         <div className="max-w-6xl mx-auto flex flex-wrap justify-between items-end gap-5 mb-12">
           <h2 className="font-display text-4xl sm:text-5xl">The Collection</h2>
           <p className="text-ivory-dim text-sm max-w-xs leading-relaxed">
@@ -64,18 +64,19 @@ export default async function Home() {
           </p>
         </div>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-2 gap-10 bg-ivory/10">
+      <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-10">
   {[
     { name: "Saint Blessed Tees", detail: "Ivory · Puff Print", image: "/products/img3.jpg" },
     { name: "Saint Swag Polo", detail: "Obsidian · Embroidered", image: "/products/img2.jpg" },
     { name: "Saint Rogue Sweat Jorts", detail: "Charcoal · Reflective Trim", image: "/products/img1.jpg" },
     { name: "Saint Skull Cap", detail: "Obsidian · Debossed", image: "/products/img4.jpg" },
   ].map((item) => (
-    <div key={item.name} className="bg-obsidian aspect-3/4 flex items-end p-6 relative group cursor-pointer overflow-hidden">
-      <Image src={item.image} alt={item.name} fill className="object-cover" />
+    <div key={item.name} className="bg-obsidian aspect-3/4 flex items-end p-4 md:p-6 relative group cursor-pointer overflow-hidden">
+      <Image src={item.image} alt={item.name} fill className="object-contain" />
+      <div className="absolute inset-0 bg-linear-to-t from-obsidian/90 via-obsidian/20 to-transparent" />
       <div className="relative z-10">
-        <b className="block text-base tracking-wide mb-1">{item.name}</b>
-        <span className="text-xs text-ivory-dim">{item.detail}</span>
+        <b className="block text-sm md:text-base tracking-wide mb-1">{item.name}</b>
+        <span className="text-[11px] md:text-xs text-ivory-dim">{item.detail}</span>
       </div>
     </div>
   ))}

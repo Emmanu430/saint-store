@@ -83,7 +83,6 @@
     return (
         <main className="min-h-screen flex items-center justify-center px-[6vw] pt-20 pb-10 bg-obsidian text-ivory">
         <div className="w-full max-w-sm bg-charcoal border border-ivory/10 p-8">
-            <div className="w-9 h-4.5 border-3 border-ivory rounded-full mx-auto mb-5" />
             <h1 className="font-display text-3xl text-center">SAINT</h1>
             <p className="text-center text-ivory-dim text-xs mt-2 mb-8">
             The motion never ends.

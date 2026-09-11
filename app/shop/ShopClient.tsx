@@ -92,11 +92,11 @@
             {filtered.map((p) => (
                 <div key={p.id} className="group">
                 <div className="aspect-4/5 bg-charcoal border border-ivory/10 relative overflow-hidden">
-                    {p.badge && (
+                    {/* {p.badge && (
                     <span className="absolute top-3.5 left-3.5 z-10 text-[10px] tracking-wide uppercase bg-burgundy px-2.5 py-1">
                         {p.badge}
                     </span>
-                    )}
+                    )} */}
                     {p.image ? (
                     <Image src={p.image} alt={p.name} fill className="object-contain" />
                     ) : (
