@@ -24,7 +24,7 @@ const unifraktur = UnifrakturCook({
 });
 
 export const metadata: Metadata = {
-  title: "SAINT — The Motion Never Ends",
+  title: "SAINT - The Motion Never Ends",
   description: "Faith. Grind. Purpose. Motion. Legacy.",
 };
 
