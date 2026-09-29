@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import Image from "next/image";
+import LookboxClient from "@/components/LookbookClient";
 
 export default async function Home() {
     const session = await auth();
@@ -82,6 +83,17 @@ export default async function Home() {
   ))}
 </div>
         </section>
+
+        <section id="lookbook" className="bg-obsidian px-[6vw] py-24 md:py-36">
+  <div className="max-w-6xl mx-auto mb-12">
+    <span className="block text-xs tracking-[0.3em] uppercase text-burgundy-bright font-bold mb-5">
+      In The Field
+    </span>
+    <h2 className="font-display text-4xl sm:text-5xl">Worn By SAINT</h2>
+  </div>
+  <LookboxClient />
+</section>
+
         <section id="manifesto" className="text-center px-[6vw] py-40">
           <blockquote className="font-display text-3xl sm:text-4xl md:text-5xl max-w-3xl mx-auto leading-snug">
             &ldquo;Slow is still moving. Stopped is the only sin.&rdquo;

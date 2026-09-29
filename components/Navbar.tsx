@@ -35,7 +35,7 @@
 
     return (
         <>
-        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[6vw] py-5 bg-gradient-to-b from-obsidian to-transparent">
+        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[6vw] py-5 bg-linear-to-b from-obsidian to-transparent">
             <Link href="/" className="font-display text-2xl">SAINT</Link>
 
             {!session && (
@@ -43,6 +43,7 @@
                 <li><Link href="/shop" className="hover:text-ivory">Shop</Link></li>
                 <li><Link href="/#philosophy" className="hover:text-ivory">Philosophy</Link></li>
                 <li><Link href="/#collection" className="hover:text-ivory">Collection</Link></li>
+                <li><Link href="/#lookbook" className="hover:text-ivory">Lookbook</Link></li>
                 <li><Link href="/#manifesto" className="hover:text-ivory">Manifesto</Link></li>
             </ul>
             )}
@@ -99,6 +100,7 @@
                 { href: "/shop", label: "Shop" },
                 { href: "/#philosophy", label: "Philosophy" },
                 { href: "/#collection", label: "Collection" },
+                { href: "/#lookbook", label: "Lookbook" },
                 { href: "/#manifesto", label: "Manifesto" },
                 { href: "/cart", label: `Cart (${cartCount})` },
                 ].map((link) => (
