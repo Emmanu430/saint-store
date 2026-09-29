@@ -118,6 +118,9 @@
                 <button disabled={loading} className="mt-2 bg-burgundy hover:bg-burgundy-bright disabled:opacity-50 transition-colors py-3.5 text-xs tracking-widest uppercase font-bold">
                 {loading ? "Signing In..." : "Sign In"}
                 </button>
+                <a href="/forgot-password" className="text-center text-xs text-ivory-dim hover:text-ivory underline">
+                    Forgot password?
+                </a>
             </form>
             ) : (
             <form onSubmit={handleSignUp} className="flex flex-col gap-4">

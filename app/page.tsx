@@ -67,17 +67,17 @@ export default async function Home() {
 
       <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-10">
   {[
-    { name: "Saint Blessed Tees", detail: "Ivory · Puff Print", image: "/products/img3.jpg" },
-    { name: "Saint Swag Polo", detail: "Obsidian · Embroidered", image: "/products/img2.jpg" },
-    { name: "Saint Rogue Sweat Jorts", detail: "Charcoal · Reflective Trim", image: "/products/img1.jpg" },
-    { name: "Saint Skull Cap", detail: "Obsidian · Debossed", image: "/products/img4.jpg" },
+    { name: "Saint Blessed Tees", image: "/products/img3.jpg" },
+    { name: "Saint Swag Polo",  image: "/products/img2.jpg" },
+    { name: "Saint Rogue Sweat Jorts",  image: "/products/img1.jpg" },
+    { name: "Saint Long Sleeve",  image: "/products/img4.jpg" },
   ].map((item) => (
     <div key={item.name} className="bg-obsidian aspect-3/4 flex items-end p-4 md:p-6 relative group cursor-pointer overflow-hidden">
       <Image src={item.image} alt={item.name} fill className="object-contain" />
       <div className="absolute inset-0 bg-linear-to-t from-obsidian/90 via-obsidian/20 to-transparent" />
       <div className="relative z-10">
         <b className="block text-sm md:text-base tracking-wide mb-1">{item.name}</b>
-        <span className="text-[11px] md:text-xs text-ivory-dim">{item.detail}</span>
+        {/* <span className="text-[11px] md:text-xs text-ivory-dim">{item.detail}</span> */}
       </div>
     </div>
   ))}

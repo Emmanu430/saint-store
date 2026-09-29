@@ -17,6 +17,7 @@
     { src: "/lookbook/img12.jpg", span: "md:row-span-3" },
     { src: "/lookbook/img13.jpg", span: "md:row-span-3" },
     { src: "/lookbook/img14.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img15.jpg", span: "md:row-span-3" },
     { src: "/lookbook/img10.jpg", span: "md:col-span-2 md:row-span-3" },
 ];
 
