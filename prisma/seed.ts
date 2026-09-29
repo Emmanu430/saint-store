@@ -34,7 +34,7 @@
         colors: ["Camo", "Leopard", "Red Leopard"],
         },
         {
-        name: "Saint Long Sleeve",
+        name: "Saint Swag Long sleeve",
         detail: "Obsidian · Ribbed Cuffs",
         price: 30000,
         category: "Polo",

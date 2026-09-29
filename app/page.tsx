@@ -70,7 +70,7 @@ export default async function Home() {
     { name: "Saint Blessed Tees", image: "/products/img3.jpg" },
     { name: "Saint Swag Polo",  image: "/products/img2.jpg" },
     { name: "Saint Rogue Sweat Jorts",  image: "/products/img1.jpg" },
-    { name: "Saint Long Sleeve",  image: "/products/img4.jpg" },
+    { name: "Saint Swag Long Sleeve",  image: "/products/img4.jpg" },
   ].map((item) => (
     <div key={item.name} className="bg-obsidian aspect-3/4 flex items-end p-4 md:p-6 relative group cursor-pointer overflow-hidden">
       <Image src={item.image} alt={item.name} fill className="object-contain" />
