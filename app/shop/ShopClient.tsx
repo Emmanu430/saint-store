@@ -5,7 +5,7 @@
     import Image from "next/image";
     import Toast from "@/components/Toast";
 
-    const categories = ["All", "Tees", "Shorts", "Accessories"];
+    const categories = ["All", "Tees", "Shorts", "Polo"];
 
     type Product = {
     id: number;
@@ -15,6 +15,7 @@
     category: string;
     badge: string | null;
     image: string | null;
+    colors: string[];
     };
 
     export default function ShopClient({ products }: { products: Product[] }) {
@@ -109,8 +110,9 @@
                     <div>
                     <b className="text-sm">{p.name}</b>
                     <span className="block text-xs text-ivory-dim">{p.detail}</span>
+                    <span className="block text-[11px] text-ivory-dim/70 mt-0.5">{p.colors.join(" · ")}</span>
                     </div>
-                    <span className="text-sm font-bold">${p.price}</span>
+                    <span className="text-sm font-bold">&#8358;{p.price.toLocaleString()}</span>
                 </div>
                 <button
                     onClick={() => addToCart(p.id, p.name)}

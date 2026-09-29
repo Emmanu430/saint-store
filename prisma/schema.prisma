@@ -26,6 +26,7 @@ model Product {
   image     String?
   createdAt DateTime   @default(now())
   cartItems CartItem[]
+  colors String[] @default([])
   
 }
 model CartItem {

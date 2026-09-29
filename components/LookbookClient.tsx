@@ -4,16 +4,20 @@
     import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
     const images = [
-  { src: "/lookbook/img1.jpg", span: "md:row-span-3" },
-  { src: "/lookbook/img2.jpg", span: "md:row-span-2" },
-  { src: "/lookbook/img3.jpg", span: "md:row-span-2" },
-  { src: "/lookbook/img4.jpg", span: "md:row-span-3" },
-  { src: "/lookbook/img5.jpg", span: "md:col-span-2 md:row-span-2" },
-  { src: "/lookbook/img6.jpg", span: "md:row-span-3" },
-  { src: "/lookbook/img7.jpg", span: "md:row-span-2" },
-  { src: "/lookbook/img8.jpg", span: "md:row-span-2" },
-  { src: "/lookbook/img9.jpg", span: "md:row-span-3" },
-  { src: "/lookbook/img10.jpg", span: "md:col-span-2 md:row-span-3" },
+    { src: "/lookbook/img1.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img2.jpg", span: "md:row-span-2" },
+    { src: "/lookbook/img3.jpg", span: "md:row-span-2" },
+    { src: "/lookbook/img4.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img5.jpg", span: "md:col-span-2 md:row-span-2" },
+    { src: "/lookbook/img6.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img7.jpg", span: "md:row-span-2" },
+    { src: "/lookbook/img8.jpg", span: "md:row-span-2" },
+    { src: "/lookbook/img9.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img11.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img12.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img13.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img14.jpg", span: "md:row-span-3" },
+    { src: "/lookbook/img10.jpg", span: "md:col-span-2 md:row-span-3" },
 ];
 
     export default function LookboxClient() {
@@ -58,7 +62,7 @@
 
         {active !== null && (
             <div
-            className="fixed inset-0 z-[100] bg-obsidian/95 flex items-center justify-center px-[6vw]"
+            className="fixed inset-0 z-100 bg-obsidian/95 flex items-center justify-center px-[6vw]"
             onClick={() => setActive(null)}
             >
             <button
