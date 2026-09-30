@@ -10,7 +10,7 @@
     product: { id: number; name: string; detail: string; price: number; image: string | null; colors: string[] };
     };
 
-    const WHATSAPP_NUMBER = "2348101719250"; // replace with your real number, no + or leading 0
+    const WHATSAPP_NUMBER = "2348148096799"; // replace with your real number, no + or leading 0
 
     function formatNaira(amount: number) {
     return amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -96,7 +96,7 @@
                 </div>
                 <div className="flex-1">
                     <b className="block text-sm">{item.product.name}</b>
-                    <span className="block text-xs text-ivory-dim mt-1">{item.product.detail}</span>
+                    {/* <span className="block text-xs text-ivory-dim mt-1">{item.product.detail}</span> */}
                     <span className="block text-[11px] text-ivory-dim/70 mt-0.5">{item.product.colors.join(" · ")}</span>
 
                     <div className="flex items-center gap-3 mt-3">

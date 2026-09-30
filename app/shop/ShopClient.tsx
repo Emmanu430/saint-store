@@ -109,7 +109,7 @@
                 <div className="flex justify-between items-start mt-3.5">
                     <div>
                     <b className="text-sm">{p.name}</b>
-                    <span className="block text-xs text-ivory-dim">{p.detail}</span>
+                    {/* <span className="block text-xs text-ivory-dim">{p.detail}</span> */}
                     <span className="block text-[11px] text-ivory-dim/70 mt-0.5">{p.colors.join(" · ")}</span>
                     </div>
                     <span className="text-sm font-bold">&#8358;{p.price.toLocaleString()}</span>
