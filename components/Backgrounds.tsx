@@ -30,8 +30,8 @@
     export function BurgundyGlow() {
     return (
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-24 top-1/4 h-96 w-96 animate-glow-a bg-[radial-gradient(closest-side,rgba(138,26,34,0.35),transparent)]" />
-        <div className="absolute -right-24 bottom-0 h-80 w-80 animate-glow-b bg-[radial-gradient(closest-side,rgba(138,26,34,0.28),transparent)]" />
+        <div className="absolute -left-16 top-1/4 h-64 w-64 md:h-96 md:w-96 animate-glow-a bg-[radial-gradient(closest-side,rgba(138,26,34,0.6),rgba(138,26,34,0.22)_55%,transparent)]" />
+        <div className="absolute -right-16 bottom-0 h-56 w-56 md:h-80 md:w-80 animate-glow-b bg-[radial-gradient(closest-side,rgba(138,26,34,0.5),rgba(138,26,34,0.18)_55%,transparent)]" />
         </div>
     );
 }

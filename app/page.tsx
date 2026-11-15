@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import LookboxClient from "@/components/LookbookClient";
 import Reveal from "@/components/Reveal";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { DriftingCrosses, BurgundyGlow } from "@/components/Backgrounds";
 
 export default async function Home() {
@@ -15,16 +16,27 @@ export default async function Home() {
   return (
     <>
       <main className="relative isolate overflow-hidden w-full flex min-h-screen flex-col items-center justify-center text-center px-[6vw] pt-32 pb-20 bg-obsidian text-ivory">
-        <DriftingCrosses />
-        <Image
-          src="/saint-logo.svg"
-          className="invert w-[75vw] max-w-[320px] h-auto"
-          alt="SAINT — The Motion Never Ends"
-          width={320}
-          height={280}
-          priority
-        />
-      </main>
+  <DriftingCrosses />
+  <div className="animate-hero-in">
+    <Image
+      src="/saint-logo.svg"
+      className="invert w-[75vw] max-w-[320px] h-auto animate-float-soft"
+      alt="SAINT — The Motion Never Ends"
+      width={320}
+      height={280}
+      priority
+    />
+  </div>
+  <Link
+    href="/shop"
+    style={{ animationDelay: "600ms" }}
+    className="group mt-10 inline-flex items-center gap-2 border border-ivory/25 px-7 py-3.5 text-xs tracking-[0.2em] uppercase animate-hero-in hover:bg-ivory hover:text-obsidian transition-colors duration-300"
+  >
+    Shop the collection
+    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+  </Link>
+  <ChevronDown aria-hidden className="absolute bottom-8 left-1/2 -translate-x-1/2 w-5 h-5 text-ivory-dim animate-cue" />
+</main>
 
       <div className="bg-burgundy overflow-hidden whitespace-nowrap py-3.5 border-y border-ivory/15">
         <div className="inline-flex animate-marquee">

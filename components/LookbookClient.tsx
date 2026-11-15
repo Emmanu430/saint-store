@@ -1,6 +1,7 @@
     "use client";
     import { useState, useEffect } from "react";
     import Image from "next/image";
+    import Reveal from "@/components/Reveal";
     import { X, ChevronLeft, ChevronRight } from "lucide-react";
 
     const images = [
@@ -47,20 +48,21 @@
         <>
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-45 md:auto-rows-42.5 grid-flow-dense">
             {images.map((item, i) => (
-            <button
-                key={i}
-                onClick={() => setActive(i)}
-                className={`relative overflow-hidden bg-charcoal cursor-pointer ${item.span}`}
-            >
-                <Image
-                src={item.src}
-                alt={`SAINT lookbook ${i + 1}`}
-                fill
-                sizes="(max-width: 768px) 50vw, 25vw"
-                className="object-cover hover:scale-105 transition-transform duration-500"
-                />
-            </button>
-            ))}
+                <Reveal key={i} delay={(i % 4) * 80} className={item.span}>
+                    <button
+                    onClick={() => setActive(i)}
+                    className="relative block h-full w-full overflow-hidden bg-charcoal cursor-pointer"
+                    >
+                    <Image
+                        src={item.src}
+                        alt={`SAINT lookbook ${i + 1}`}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                    </button>
+                </Reveal>
+                ))}
         </div>
 
         {active !== null && (

@@ -3,8 +3,10 @@
     import { useRouter } from "next/navigation";
     import { useSession } from "next-auth/react";
     import Image from "next/image";
+    import { ShoppingCart  } from "lucide-react";
     import Toast from "@/components/Toast";
     import Reveal from "@/components/Reveal";
+    import { ShoppingBag, Check } from "lucide-react";
 
     const categories = ["All", "Tees", "Shorts", "Polo"];
 
@@ -31,6 +33,7 @@
     const [selection, setSelection] = useState<Record<number, Selection>>({});
     const { data: session } = useSession();
     const [toast, setToast] = useState("");
+    const [justAdded, setJustAdded] = useState<number | null>(null);
     const router = useRouter();
 
     const filtered =
@@ -48,6 +51,8 @@
 
     const addToCart = async (p: Product) => {
         if (!session) {
+        setJustAdded(p.id);
+        setTimeout(() => setJustAdded((cur) => (cur === p.id ? null : cur)), 1400);
         router.push("/login");
         return;
         }
@@ -82,11 +87,11 @@
     };
 
     const chip = (active: boolean) =>
-        `px-2.5 py-1 text-[10px] tracking-wider uppercase border transition-colors cursor-pointer ${
+    `px-2 py-1 text-[10px] tracking-wide uppercase border transition-colors cursor-pointer ${
         active
-            ? "bg-ivory text-obsidian border-ivory"
-            : "border-ivory/20 text-ivory-dim hover:border-ivory/60"
-        }`;
+        ? "bg-ivory text-obsidian border-ivory"
+        : "border-ivory/20 text-ivory-dim hover:border-ivory/60"
+    }`;
 
     return (
         <main className="pt-28 pb-24 px-[6vw] bg-obsidian text-ivory min-h-screen">
@@ -123,22 +128,22 @@
             <p className="text-ivory-dim text-sm">No pieces in this category right now — check back soon.</p>
             </div>
         ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map((p, i) => {
                 const sel = selection[p.id] ?? {};
                 const selectedColor = resolve(p.colors, sel.color);
                 const selectedSize = resolve(p.sizes, sel.size);
 
                 return (
-                <Reveal key={p.id} delay={(i % 3) * 100}>
-                    <div className="group">
+                <Reveal key={p.id} delay={(i % 3) * 100} className="h-full">
+                    <div className="group flex h-full flex-col transition-transform duration-300 hover:-translate-y-1">
                     <div className="aspect-4/5 bg-charcoal border border-ivory/10 relative overflow-hidden">
                         {p.image ? (
                         <Image
                             src={p.image}
                             alt={p.name}
                             fill
-                            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                             className="object-contain transition-transform duration-500 group-hover:scale-105"
                         />
                         ) : (
@@ -186,12 +191,22 @@
                         </div>
                     )}
 
-                    <button
-                        onClick={() => addToCart(p)}
-                        className="w-full mt-3 border border-ivory/20 py-2.5 text-[11px] tracking-widest uppercase hover:bg-ivory hover:text-obsidian transition-colors cursor-pointer"
-                    >
-                        Add to Cart
-                    </button>
+                    <div className="mt-auto pt-3">
+                        <button
+                            onClick={() => addToCart(p)}
+                            className={`w-full flex items-center justify-center gap-2 border py-2.5 text-[11px] tracking-widest uppercase transition-all duration-300 active:scale-[0.98] cursor-pointer ${
+                            justAdded === p.id
+                                ? "bg-burgundy border-burgundy text-ivory"
+                                : "border-ivory/20 hover:bg-ivory hover:text-obsidian"
+                            }`}
+                        >
+                            {justAdded === p.id ? (
+                            <><Check className="w-4 h-4" /> Added</>
+                            ) : (
+                            <><ShoppingBag className="w-4 h-4" /> Add to Cart</>
+                            )}
+                        </button>
+                        </div>
                     </div>
                 </Reveal>
                 );
