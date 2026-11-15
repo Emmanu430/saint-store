@@ -20,9 +20,9 @@
     { src: "/lookbook/img14.jpg", span: "md:row-span-3" },
     { src: "/lookbook/img15.jpg", span: "md:row-span-3" },
     { src: "/lookbook/img16.jpg", span: "md:row-span-2" },
-];
+    ];
 
-    export default function LookboxClient() {
+    export default function LookbookClient() {
     const [active, setActive] = useState<number | null>(null);
 
     useEffect(() => {
@@ -45,8 +45,8 @@
 
     return (
         <>
-        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-45 md:auto-rows-42.5 grid-flow-dense">  
-                {images.map((item, i) => (
+        <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 auto-rows-45 md:auto-rows-42.5 grid-flow-dense">
+            {images.map((item, i) => (
             <button
                 key={i}
                 onClick={() => setActive(i)}
@@ -54,8 +54,9 @@
             >
                 <Image
                 src={item.src}
-                alt="SAINT lookbook"
+                alt={`SAINT lookbook ${i + 1}`}
                 fill
+                sizes="(max-width: 768px) 50vw, 25vw"
                 className="object-cover hover:scale-105 transition-transform duration-500"
                 />
             </button>
@@ -64,29 +65,48 @@
 
         {active !== null && (
             <div
-            className="fixed inset-0 z-100 bg-obsidian/95 flex items-center justify-center px-[6vw]"
+            className="fixed inset-0 z-100 bg-obsidian/95 flex items-center justify-center px-[6vw] animate-fade-in"
             onClick={() => setActive(null)}
             >
             <button
                 onClick={() => setActive(null)}
+                aria-label="Close"
                 className="absolute top-6 right-[6vw] text-ivory hover:rotate-90 transition-transform duration-300 cursor-pointer"
             >
                 <X className="w-7 h-7" />
             </button>
 
             <button
-                onClick={(e) => { e.stopPropagation(); setActive((active - 1 + images.length) % images.length); }}
+                onClick={(e) => {
+                e.stopPropagation();
+                setActive((active - 1 + images.length) % images.length);
+                }}
+                aria-label="Previous photo"
                 className="absolute left-4 md:left-10 text-ivory hover:text-burgundy-bright cursor-pointer"
             >
                 <ChevronLeft className="w-8 h-8" />
             </button>
 
-            <div className="relative w-full max-w-2xl h-[80vh]" onClick={(e) => e.stopPropagation()}>
-                <Image src={images[active].src} alt="SAINT lookbook" fill className="object-contain" />
+            <div
+                key={active}
+                className="relative w-full max-w-2xl h-[80vh] animate-lightbox"
+                onClick={(e) => e.stopPropagation()}
+            >
+                <Image
+                src={images[active].src}
+                alt={`SAINT lookbook ${active + 1}`}
+                fill
+                sizes="(max-width: 768px) 100vw, 672px"
+                className="object-contain"
+                />
             </div>
 
             <button
-                onClick={(e) => { e.stopPropagation(); setActive((active + 1) % images.length); }}
+                onClick={(e) => {
+                e.stopPropagation();
+                setActive((active + 1) % images.length);
+                }}
+                aria-label="Next photo"
                 className="absolute right-4 md:right-10 text-ivory hover:text-burgundy-bright cursor-pointer"
             >
                 <ChevronRight className="w-8 h-8" />

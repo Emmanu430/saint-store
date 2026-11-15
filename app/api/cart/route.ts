@@ -8,15 +8,22 @@
         return NextResponse.json({ error: "Not signed in" }, { status: 401 });
     }
 
-    const { productId } = await req.json();
+    const { productId, size = "", color = "" } = await req.json();
+    const userId = Number(session.user.id);
+
+    const product = await prisma.product.findUnique({ where: { id: productId } });
+    if (!product) {
+        return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+    if (
+        (product.sizes.length && !product.sizes.includes(size)) ||
+        (product.colors.length && !product.colors.includes(color))
+    ) {
+        return NextResponse.json({ error: "Invalid size or color" }, { status: 400 });
+    }
 
     const existing = await prisma.cartItem.findUnique({
-        where: {
-        userId_productId: {
-            userId: Number(session.user.id),
-            productId,
-        },
-        },
+        where: { userId_productId_size_color: { userId, productId, size, color } },
     });
 
     if (existing) {
@@ -26,11 +33,7 @@
         });
     } else {
         await prisma.cartItem.create({
-        data: {
-            userId: Number(session.user.id),
-            productId,
-            quantity: 1,
-        },
+        data: { userId, productId, size, color, quantity: 1 },
         });
     }
 

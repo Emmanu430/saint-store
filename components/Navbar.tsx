@@ -5,6 +5,14 @@
     import { useSession, signOut } from "next-auth/react";
     import { Menu, X } from "lucide-react";
 
+    function CartLabel({ count }: { count: number }) {
+    return (
+        <>
+        Cart (<span key={count} className="inline-block animate-bump">{count}</span>)
+        </>
+    );
+    }
+
     export default function Navbar() {
     const { data: session, status } = useSession();
     const [cartCount, setCartCount] = useState(0);
@@ -29,13 +37,16 @@
         return () => window.removeEventListener("cart-updated", fetchCount);
     }, [session]);
 
-    const switchLink = pathname === "/cart"
+    const cartLabel = <CartLabel count={cartCount} />;
+    const switchLink =
+        pathname === "/cart"
         ? { href: "/shop", label: "Shop" }
-        : { href: "/cart", label: `Cart (${cartCount})` };
+        : { href: "/cart", label: cartLabel };
 
     return (
         <>
         <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-[6vw] py-5 bg-linear-to-b from-obsidian to-transparent">
+            {/* <div aria-hidden className="grain animate-grain pointer-events-none absolute inset-0 -z-10 opacity-[0.12]" /> */}
             <Link href="/" className="font-display text-2xl">SAINT</Link>
 
             {!session && (
@@ -51,8 +62,11 @@
             <div className="hidden md:flex items-center gap-5 text-xs tracking-widest uppercase text-ivory-dim">
             {status === "loading" ? null : session ? (
                 <>
-                <span className="text-ivory">
-                    Hi, {session.user?.name?.split(" ")[0]}
+                <span className="flex items-baseline gap-2">
+                <span className="text-ivory-dim">Hi,</span>
+                <span className="font-marker text-lg normal-case tracking-normal text-ivory">
+                    {session.user?.name?.split(" ")[0]}
+                </span>
                 </span>
                 <button onClick={() => signOut({ callbackUrl: "/" })} className="hover:text-ivory cursor-pointer">
                     Sign Out
@@ -62,7 +76,7 @@
             ) : (
                 <>
                 <Link href="/login" className="hover:text-ivory">Sign In</Link>
-                <Link href="/cart" className="hover:text-ivory">Cart ({cartCount})</Link>
+                <Link href="/cart" className="hover:text-ivory">{cartLabel}</Link>
                 </>
             )}
             </div>
@@ -102,7 +116,7 @@
                 { href: "/#collection", label: "Collection" },
                 { href: "/#lookbook", label: "Lookbook" },
                 { href: "/#manifesto", label: "Manifesto" },
-                { href: "/cart", label: `Cart (${cartCount})` },
+                { href: "/cart", label: cartLabel },
                 ].map((link) => (
                 <Link
                     key={link.href}

@@ -4,12 +4,18 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Providers from "@/components/Providers";
+import { Permanent_Marker } from "next/font/google";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
+const marker = Permanent_Marker({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-permanent-marker",
+});
 
 const germania = Germania_One({
   variable: "--font-germania",
@@ -34,8 +40,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${unifraktur.variable} ${germania.variable} antialiased`}>
+    <html lang="en" data-scroll-behavior="smooth">
+      <body className={`${inter.variable} ${unifraktur.variable} ${germania.variable} antialiased ${marker.variable}`}>
   <Providers>
     <Navbar />
     {children}

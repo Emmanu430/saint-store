@@ -5,6 +5,7 @@
         if (pathname === "/login" || pathname === "/cart") return null;
     return (
         <footer className="flex flex-wrap justify-between items-center gap-5 px-[6vw] py-10 border-t border-ivory/10 text-ivory">
+        <div aria-hidden className="grain grain-up animate-grain pointer-events-none absolute inset-0 -z-10 opacity-[0.12]" />
         <span className="font-display text-xl">SAINT</span>
         <ul className="flex gap-6 text-xs text-ivory-dim">
             <li><a href="mailto:saxntcoulture@gmail.com" target="_blank" rel="noopener noreferrer" className="hover:text-ivory">Mail</a></li>
