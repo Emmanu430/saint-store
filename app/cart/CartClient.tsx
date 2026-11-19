@@ -1,6 +1,6 @@
     "use client";
     import { useState } from "react";
-    import { ShoppingBag, Minus, Plus, X, Landmark } from "lucide-react";
+    import { ShoppingBag, Minus, Plus, X, Landmark, Trash2 } from "lucide-react";
     import Image from "next/image";
     import Toast from "@/components/Toast";
     import BankTransferModal from "@/components/BankTransferModal";
@@ -35,6 +35,8 @@
     const [toast, setToast] = useState("");
     const [bankOpen, setBankOpen] = useState(false);
     const [reference, setReference] = useState("");
+    const [sent, setSent] = useState(false);
+    const [confirmClear, setConfirmClear] = useState(false);
 
     const showToast = (msg: string, ms = 2500) => {
         setToast(msg);
@@ -70,6 +72,24 @@
         window.dispatchEvent(new Event("cart-updated"));
     };
 
+    const clearCart = async () => {
+        if (!confirmClear) {
+        setConfirmClear(true);
+        setTimeout(() => setConfirmClear(false), 3000);
+        return;
+        }
+        const res = await fetch("/api/cart", { method: "DELETE" });
+        if (!res.ok) {
+        showToast("Couldn't clear cart");
+        return;
+        }
+        setItems([]);
+        setConfirmClear(false);
+        setSent(false);
+        window.dispatchEvent(new Event("cart-updated"));
+        showToast("Cart cleared");
+    };
+
     const total = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
 
     const orderLines = () =>
@@ -88,6 +108,7 @@
         ].join("\n");
 
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+        setSent(true);
         showToast("Order sent — confirm with SAINT on WhatsApp to complete your purchase", 4000);
     };
 
@@ -109,6 +130,7 @@
         ].join("\n");
 
         window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+        setSent(true);
         setBankOpen(false);
         showToast("Send your receipt in the WhatsApp chat so SAINT can confirm", 4000);
     };
@@ -180,6 +202,17 @@
                 <div className="text-sm font-bold">₦{formatNaira(item.product.price * item.quantity)}</div>
                 </div>
             ))}
+
+            {items.length > 0 && (
+                <button
+                onClick={clearCart}
+                className={`mt-6 inline-flex items-center gap-1.5 text-[11px] tracking-widest uppercase cursor-pointer transition-colors ${
+                    confirmClear ? "text-ivory" : "text-ivory-dim hover:text-ivory"
+                }`}
+                >
+                <Trash2 className="w-3.5 h-3.5" /> {confirmClear ? "Tap again to clear" : "Clear cart"}
+                </button>
+            )}
             </div>
 
             <div className="bg-charcoal border border-ivory/10 p-7 h-fit">
@@ -208,6 +241,18 @@
             <p className="text-[11px] text-gunmetal text-center mt-3">
                 You&apos;ll confirm your order and payment directly with SAINT on WhatsApp.
             </p>
+
+            {sent && (
+                <div className="mt-4 border-l-2 border-burgundy-bright pl-3 text-[11px] leading-relaxed text-ivory-dim">
+                Order sent on WhatsApp? Once SAINT confirms it, you can clear your cart.
+                <button
+                    onClick={clearCart}
+                    className="block mt-1 text-ivory underline underline-offset-2 cursor-pointer"
+                >
+                    {confirmClear ? "Tap again to clear" : "Clear cart"}
+                </button>
+                </div>
+            )}
             </div>
         </div>
 

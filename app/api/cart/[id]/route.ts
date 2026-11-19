@@ -9,10 +9,15 @@
     const { id } = await params;
     const { quantity } = await req.json();
 
-    await prisma.cartItem.update({
-        where: { id: Number(id) },
+    if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
+        return NextResponse.json({ error: "Invalid quantity" }, { status: 400 });
+    }
+
+    const { count } = await prisma.cartItem.updateMany({
+        where: { id: Number(id), userId: Number(session.user.id) },
         data: { quantity },
     });
+    if (!count) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     return NextResponse.json({ success: true });
     }
@@ -23,7 +28,10 @@
 
     const { id } = await params;
 
-    await prisma.cartItem.delete({ where: { id: Number(id) } });
+    const { count } = await prisma.cartItem.deleteMany({
+        where: { id: Number(id), userId: Number(session.user.id) },
+    });
+    if (!count) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
     return NextResponse.json({ success: true });
 }

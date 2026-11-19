@@ -1,12 +1,11 @@
     "use client";
-    import { useState } from "react";
+    import { useState, useEffect } from "react";
     import { useRouter } from "next/navigation";
     import { useSession } from "next-auth/react";
     import Image from "next/image";
-    import { ShoppingCart  } from "lucide-react";
+    import { ShoppingBag, Check } from "lucide-react";
     import Toast from "@/components/Toast";
     import Reveal from "@/components/Reveal";
-    import { ShoppingBag, Check } from "lucide-react";
 
     const categories = ["All", "Tees", "Shorts", "Polo"];
 
@@ -31,9 +30,9 @@
     export default function ShopClient({ products }: { products: Product[] }) {
     const [activeCategory, setActiveCategory] = useState("All");
     const [selection, setSelection] = useState<Record<number, Selection>>({});
-    const { data: session } = useSession();
-    const [toast, setToast] = useState("");
     const [justAdded, setJustAdded] = useState<number | null>(null);
+    const { data: session, status } = useSession();
+    const [toast, setToast] = useState("");
     const router = useRouter();
 
     const filtered =
@@ -49,32 +48,57 @@
     const pick = (id: number, key: "size" | "color", value: string) =>
         setSelection((prev) => ({ ...prev, [id]: { ...prev[id], [key]: value } }));
 
-    const addToCart = async (p: Product) => {
-        if (!session) {
-        setJustAdded(p.id);
-        setTimeout(() => setJustAdded((cur) => (cur === p.id ? null : cur)), 1400);
-        router.push("/login");
-        return;
-        }
+    const postToCart = (productId: number, size: string, color: string) =>
+        fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, size, color }),
+        });
 
+    // finish an add-to-cart that was interrupted by signing in
+    useEffect(() => {
+        if (status !== "authenticated") return;
+        let raw: string | null = null;
+        try {
+        raw = sessionStorage.getItem("pendingAdd");
+        sessionStorage.removeItem("pendingAdd");
+        } catch {}
+        if (!raw) return;
+        try {
+        const { productId, size, color } = JSON.parse(raw);
+        const name = products.find((p) => p.id === productId)?.name ?? "Item";
+        postToCart(productId, size, color).then((res) => {
+            if (res.ok) {
+            showToast(`${name} added to your cart`);
+            window.dispatchEvent(new Event("cart-updated"));
+            }
+        });
+        } catch {}
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [status]);
+
+    const addToCart = async (p: Product) => {
         const sel = selection[p.id] ?? {};
         const size = resolve(p.sizes, sel.size);
         const color = resolve(p.colors, sel.color);
 
+        if (size === undefined || color === undefined) {
         const missing = [size === undefined && "size", color === undefined && "color"]
-        .filter(Boolean)
-        .join(" and ");
-        if (missing) {
+            .filter(Boolean)
+            .join(" and ");
         showToast(`Please select a ${missing}`);
         return;
         }
 
-        const res = await fetch("/api/cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productId: p.id, size, color }),
-        });
+        if (!session) {
+        try {
+            sessionStorage.setItem("pendingAdd", JSON.stringify({ productId: p.id, size, color }));
+        } catch {}
+        router.push("/login?next=/shop");
+        return;
+        }
 
+        const res = await postToCart(p.id, size, color);
         if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         console.error("Add to cart failed:", res.status, data);
@@ -84,14 +108,16 @@
 
         showToast(`${p.name} added to cart`);
         window.dispatchEvent(new Event("cart-updated"));
+        setJustAdded(p.id);
+        setTimeout(() => setJustAdded((cur) => (cur === p.id ? null : cur)), 1400);
     };
 
     const chip = (active: boolean) =>
-    `px-2 py-1 text-[10px] tracking-wide uppercase border transition-colors cursor-pointer ${
+        `px-2 py-1 text-[10px] tracking-wide uppercase border transition-colors cursor-pointer ${
         active
-        ? "bg-ivory text-obsidian border-ivory"
-        : "border-ivory/20 text-ivory-dim hover:border-ivory/60"
-    }`;
+            ? "bg-ivory text-obsidian border-ivory"
+            : "border-ivory/20 text-ivory-dim hover:border-ivory/60"
+        }`;
 
     return (
         <main className="pt-28 pb-24 px-[6vw] bg-obsidian text-ivory min-h-screen">
@@ -193,20 +219,20 @@
 
                     <div className="mt-auto pt-3">
                         <button
-                            onClick={() => addToCart(p)}
-                            className={`w-full flex items-center justify-center gap-2 border py-2.5 text-[11px] tracking-widest uppercase transition-all duration-300 active:scale-[0.98] cursor-pointer ${
+                        onClick={() => addToCart(p)}
+                        className={`w-full flex items-center justify-center gap-2 border py-2.5 text-[11px] tracking-widest uppercase transition-all duration-300 active:scale-[0.98] cursor-pointer ${
                             justAdded === p.id
-                                ? "bg-burgundy border-burgundy text-ivory"
-                                : "border-ivory/20 hover:bg-ivory hover:text-obsidian"
-                            }`}
+                            ? "bg-burgundy border-burgundy text-ivory"
+                            : "border-ivory/20 hover:bg-ivory hover:text-obsidian"
+                        }`}
                         >
-                            {justAdded === p.id ? (
+                        {justAdded === p.id ? (
                             <><Check className="w-4 h-4" /> Added</>
-                            ) : (
+                        ) : (
                             <><ShoppingBag className="w-4 h-4" /> Add to Cart</>
-                            )}
+                        )}
                         </button>
-                        </div>
+                    </div>
                     </div>
                 </Reveal>
                 );

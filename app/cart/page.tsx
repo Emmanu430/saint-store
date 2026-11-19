@@ -5,7 +5,7 @@
 
     export default async function CartPage() {
     const session = await auth();
-    if (!session?.user?.id) redirect("/login");
+    if (!session?.user?.id) redirect("/login?next=/cart");
 
     const items = await prisma.cartItem.findMany({
         where: { userId: Number(session.user.id) },

@@ -4,18 +4,27 @@
     import { useRouter } from "next/navigation";
     import { Eye, EyeOff } from "lucide-react";
 
+    // only allow same-site paths, so nobody can bounce users to another website
+    function getNext() {
+    if (typeof window === "undefined") return "/shop";
+    const n = new URLSearchParams(window.location.search).get("next");
+    return n && n.startsWith("/") && !n.startsWith("//") ? n : "/shop";
+    }
+
     export default function Login() {
     const [mode, setMode] = useState<"signin" | "signup">("signin");
     const [form, setForm] = useState({ name: "", email: "", password: "" });
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    const { data: session, status } = useSession(); 
+    const { status } = useSession();
     const router = useRouter();
-        useEffect(()=>{
-            if(status === "authenticated"){
-                router.push("/shop")
-            }
-        },[status, router])
+
+    useEffect(() => {
+        if (status === "authenticated") {
+        router.push(getNext());
+        }
+    }, [status, router]);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -35,50 +44,50 @@
         if (res?.error) {
         setError("Invalid email or password.");
         } else {
-        router.push("/shop");
+        router.push(getNext());
         }
     };
 
     const handleSignUp = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setError("");
+        e.preventDefault();
+        setError("");
 
-  if (!form.name.trim()) {
-    setError("Please enter your name.");
-    return;
-  }
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
-    setError("Please enter a valid email address.");
-    return;
-  }
-  if (form.password.length < 8) {
-    setError("Password must be at least 8 characters.");
-    return;
-  }
+        if (!form.name.trim()) {
+        setError("Please enter your name.");
+        return;
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+        setError("Please enter a valid email address.");
+        return;
+        }
+        if (form.password.length < 8) {
+        setError("Password must be at least 8 characters.");
+        return;
+        }
 
-  setLoading(true);
+        setLoading(true);
 
-  const res = await fetch("/api/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(form),
-  });
+        const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+        });
 
-  const data = await res.json();
-  setLoading(false);
+        const data = await res.json();
+        setLoading(false);
 
-  if (!res.ok) {
-    setError(data.error || "Something went wrong.");
-    return;
-  }
+        if (!res.ok) {
+        setError(data.error || "Something went wrong.");
+        return;
+        }
 
-  await signIn("credentials", {
-    email: form.email,
-    password: form.password,
-    redirect: false,
-  });
-  router.push("/shop");
-};
+        await signIn("credentials", {
+        email: form.email,
+        password: form.password,
+        redirect: false,
+        });
+        router.push(getNext());
+    };
 
     return (
         <main className="min-h-screen flex items-center justify-center px-[6vw] pt-20 pb-10 bg-obsidian text-ivory">
@@ -115,11 +124,14 @@
             <form onSubmit={handleSignIn} className="flex flex-col gap-4">
                 <Field label="Email" type="email" name="email" placeholder="you@email.com" onChange={handleChange} />
                 <Field label="Password" type="password" name="password" placeholder="••••••••" onChange={handleChange} />
-                <button disabled={loading} className="mt-2 bg-burgundy hover:bg-burgundy-bright disabled:opacity-50 transition-colors py-3.5 text-xs tracking-widest uppercase font-bold">
+                <button
+                disabled={loading}
+                className="mt-2 bg-burgundy hover:bg-burgundy-bright disabled:opacity-50 transition-colors py-3.5 text-xs tracking-widest uppercase font-bold"
+                >
                 {loading ? "Signing In..." : "Sign In"}
                 </button>
                 <a href="/forgot-password" className="text-center text-xs text-ivory-dim hover:text-ivory underline">
-                    Forgot password?
+                Forgot password?
                 </a>
             </form>
             ) : (
@@ -127,7 +139,10 @@
                 <Field label="Full Name" type="text" name="name" placeholder="Your name" onChange={handleChange} />
                 <Field label="Email" type="email" name="email" placeholder="you@email.com" onChange={handleChange} />
                 <Field label="Password" type="password" name="password" placeholder="••••••••" onChange={handleChange} />
-                <button disabled={loading} className="mt-2 bg-burgundy hover:bg-burgundy-bright disabled:opacity-50 transition-colors py-3.5 text-xs tracking-widest uppercase font-bold">
+                <button
+                disabled={loading}
+                className="mt-2 bg-burgundy hover:bg-burgundy-bright disabled:opacity-50 transition-colors py-3.5 text-xs tracking-widest uppercase font-bold"
+                >
                 {loading ? "Creating Account..." : "Create Account"}
                 </button>
             </form>
@@ -142,9 +157,16 @@
     }
 
     function Field({
-    label, type, name, placeholder, onChange,
+    label,
+    type,
+    name,
+    placeholder,
+    onChange,
     }: {
-    label: string; type: string; name: string; placeholder: string;
+    label: string;
+    type: string;
+    name: string;
+    placeholder: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     }) {
     const [show, setShow] = useState(false);

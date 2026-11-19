@@ -39,3 +39,16 @@
 
     return NextResponse.json({ success: true });
 }
+
+export async function DELETE() {
+    const session = await auth();
+    if (!session?.user?.id) {
+        return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+    }
+
+    await prisma.cartItem.deleteMany({
+        where: { userId: Number(session.user.id) },
+    });
+
+    return NextResponse.json({ success: true });
+}
