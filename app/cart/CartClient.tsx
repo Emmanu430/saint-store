@@ -1,8 +1,9 @@
     "use client";
     import { useState } from "react";
-    import { Minus, Plus, X, ShoppingBag } from "lucide-react";
+    import { ShoppingBag, Minus, Plus, X, Landmark } from "lucide-react";
     import Image from "next/image";
     import Toast from "@/components/Toast";
+    import BankTransferModal from "@/components/BankTransferModal";
 
     type CartItem = {
     id: number;
@@ -14,6 +15,17 @@
 
     const WHATSAPP_NUMBER = "2348148096799"; // no + or leading 0
 
+    const BANK = {
+    bank: "FIRST BANK PLC",
+    accountName: "OYEBAMI HARMONY AYOMIKUN",
+    accountNumber: "3061547806",
+    };
+
+    const SUPPORT_LABEL = "+234 814 809 6799";
+    const SUPPORT_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
+    "Hi SAINT, I have a question before I pay."
+    )}`;
+
     function formatNaira(amount: number) {
     return amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
@@ -21,6 +33,8 @@
     export default function CartClient({ initialItems }: { initialItems: CartItem[] }) {
     const [items, setItems] = useState(initialItems);
     const [toast, setToast] = useState("");
+    const [bankOpen, setBankOpen] = useState(false);
+    const [reference, setReference] = useState("");
 
     const showToast = (msg: string, ms = 2500) => {
         setToast(msg);
@@ -58,23 +72,45 @@
 
     const total = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
 
-    const handleCheckout = () => {
-        const lines = items.map((i) => {
+    const orderLines = () =>
+        items.map((i) => {
         const opts = [i.color, i.size].filter(Boolean).join(", ");
         return `• ${i.product.name}${opts ? ` (${opts})` : ""} x${i.quantity} — ₦${formatNaira(i.product.price * i.quantity)}`;
         });
+
+    const handleCheckout = () => {
         const message = [
         "Hi SAINT, I'd like to order:",
         "",
-        ...lines,
+        ...orderLines(),
         "",
         `Total: ₦${formatNaira(total)}`,
         ].join("\n");
 
-        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-        window.open(url, "_blank");
-
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
         showToast("Order sent — confirm with SAINT on WhatsApp to complete your purchase", 4000);
+    };
+
+    const openTransfer = () => {
+        setReference(`SAINT-${Math.random().toString(36).slice(2, 6).toUpperCase()}`);
+        setBankOpen(true);
+    };
+
+    const handleTransferPaid = () => {
+        const message = [
+        "Hi SAINT, I've paid by bank transfer.",
+        `Reference: ${reference}`,
+        "",
+        ...orderLines(),
+        "",
+        `Total paid: ₦${formatNaira(total)}`,
+        "",
+        "Sending my receipt now.",
+        ].join("\n");
+
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+        setBankOpen(false);
+        showToast("Send your receipt in the WhatsApp chat so SAINT can confirm", 4000);
     };
 
     return (
@@ -152,6 +188,7 @@
                 <span>Total</span>
                 <span>₦{formatNaira(total)}</span>
             </div>
+
             <button
                 disabled={items.length === 0}
                 onClick={handleCheckout}
@@ -159,11 +196,31 @@
             >
                 Checkout via WhatsApp
             </button>
+
+            <button
+                disabled={items.length === 0}
+                onClick={openTransfer}
+                className="w-full mt-3 flex items-center justify-center gap-2 border border-ivory/25 hover:bg-ivory hover:text-obsidian disabled:opacity-40 disabled:cursor-not-allowed transition-colors py-4 text-xs tracking-widest uppercase font-bold cursor-pointer"
+            >
+                <Landmark className="w-4 h-4" /> Pay by transfer
+            </button>
+
             <p className="text-[11px] text-gunmetal text-center mt-3">
                 You&apos;ll confirm your order and payment directly with SAINT on WhatsApp.
             </p>
             </div>
         </div>
+
+        <BankTransferModal
+            open={bankOpen}
+            onClose={() => setBankOpen(false)}
+            amountLabel={formatNaira(total)}
+            reference={reference}
+            bank={BANK}
+            onConfirm={handleTransferPaid}
+            supportUrl={SUPPORT_URL}
+            supportLabel={SUPPORT_LABEL}
+        />
 
         {toast && <Toast message={toast} />}
         </main>
